@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>html5</title>
+        <style type="text/css" media="screen">
+            .error {
+                color: red;
+            }
+            .position {
+                color: green;
+            }
+        </style>
+        <script type="text/javascript" charset="utf-8">
+            (function() {
+                window.onload = function() {
+                    var geo = navigator.geolocation || null;
+                    var loc = document.getElementById('location');
+
+                    function errorHandler(error) {
+                        var error = document.createElement('div');
+                        error.className = 'error';
+                        switch (error.code) {
+                            case error.TIMEOUT:
+                                error.innerHTML = 'Geolocation timeout';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                error.innerHTML = 'Geolocation position unavailable';
+                                break;
+                            case error.PERMISSION_DENIED:
+                                error.innerHTML = 'Geolocation permission denied';
+                                break;
+                            default:
+                                error.innerHTML = 'Unknown error: ' + error.code;
+                                break;
+                        }
+                        loc.appendChild(error);
+                    }
+
+                    function renderPosition(pos) {
+                        var latlon = document.createElement('div');
+                        latlon.className = 'position';
+                        latlon.innerHTML = pos.coords.latitude + ", " + pos.coords.longitude;
+                        loc.appendChild(latlon);
+                    }
+                    geo.watchPosition(renderPosition, errorHandler, {
+                        timeout: 300000,
+                        enableHighAccuracy: true
+                    });
+                }
+            })();
+        </script>
+    </head>
+    <body>
+        <div id="location"></div>
+    </body>
+</html>
